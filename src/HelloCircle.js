@@ -67,7 +67,6 @@ drawTriangle(vertices) {
 
 
 render() {
-  console.log("Rendering...")
   // Pass the position of a point to a_Position variable
   // gl.disableVertexAttribArray(a_Position);
   var Xy = this.position;
@@ -82,9 +81,6 @@ render() {
 
   // Pass the color of a point to u_FragColor variable
   gl.uniform4f(u_FragColor, rgba[0], rgba[1], rgba[2], rgba[3]);
-  
-  // Draw triangl
-    console.log("this.drawTriangle")
-    this.drawTriangle(this.vertices);
+  this.drawTriangle(this.vertices);
 }
 }

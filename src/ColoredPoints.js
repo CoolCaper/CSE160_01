@@ -29,7 +29,7 @@ function setupWebGL() {
   // Get the rendering context for WebGL
   gl = getWebGLContext(canvas);
   if (!gl) {
-    //console.log('Failed to get the rendering context for WebGL');
+    console.log('Failed to get the rendering context for WebGL');
     return;
   }
 }
@@ -63,7 +63,6 @@ function connectVariablesToGLSL() {
     
   // Write the positions of vertices to a vertex shader
   var n = 3;
-  console.log("I think there should be three of n. n's value is", n)
   if (n < 0) {
     console.log('Failed to set the positions of the vertices');
     return;
@@ -74,6 +73,7 @@ var selected_Size = 50;
 let segments = 5
 let choose_shape = 0 //0 means point 1 means triangle 2 means circle
 let shape_array = ['point', 'triangle', 'circle'];
+let tri_type;
 function addActionsforHTMLUI() {;
 document.getElementById("red_button").onclick = function() {color_storage = [1.0, 0.0, 0.0, 1.0];
 updateSliders();}
@@ -95,7 +95,6 @@ updateSliders();}
   document.getElementById("circle_Point").onclick = (function() {choose_shape = 2})
 
   document.getElementById("picture").onclick = (function() { drawPicture(); })
-  //console.log("TRI TYPE: ", triangle_type)
 }
 
 
@@ -120,7 +119,6 @@ class Point {
   }
 
   render() {
-    ////console.log("Rendering...")
     // Pass the position of a point to a_Position variable
     var xy = this.position;
     gl.disableVertexAttribArray(a_Position);
@@ -129,8 +127,6 @@ class Point {
     gl.uniform4f(u_FragColor, this.color[0], this.color[1], this.color[2], this.color[3]);
     gl.uniform1f(u_Size, this.Size)
     gl.drawArrays(gl.POINTS, 0, 1);
-    //console.log(this.color)
-    // 
   }
 }
 
@@ -165,40 +161,24 @@ function main() {
 //var g_colors = [];  // The array to store the color of a point
 //var g_sizes = [];
 function click(ev) {
-  
-  //var triangle_type = document.getElementById("triangle").value
   var point;
   var rect = ev.target.getBoundingClientRect();  
   var x = ev.clientX; // x coordinate of a mouse pointer
   var y = ev.clientY; // y coordinate of a mouse pointer
   x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
   y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
-  if (choose_shape == 1) { 
-    // Add a check for a flipped triangle
-    // [xy[0], xy[1], xy[0]-d, xy[1], xy[0], xy[1]-d]
-    //console.log("TRIANGLE TYPE", triangle_type)
-    point = new Triangle(color=color_storage.slice(),size=selected_Size,position=[x, y],"right_left")
-    console.log("TRI TYPE:", point.tri_type)
-    //console.log("Tri Type Triangle:\n", point);
+  if (choose_shape == 1) {
+
+    tri_type = document.getElementById("tri_type").value
+    console.log("Tri_type outside", tri_type)
+    point = new Triangle(color=color_storage.slice(),size=selected_Size,position=[x, y],vertices=[],tri_type)
   } else if (choose_shape == 0){
-    //console.log("Getting point...")
     point = new Point(color_storage.slice(), selected_Size, [x, y])
   } else {
     point = new Circle(color=color_storage.slice(), size=selected_Size, position=[x, y], segments)
     // draw Circle
-
   }
-  //console.log("COLOR FINAL", color_storage)
-  //console.log("This is what happens when the canvas is clicked on.")
-  //console.log("Obtaining X and Y coordinates of mouse pointer...")
-  //console.log("Done.\nX Coordinate: ", x, "\nY Coordinate: ", y)
-
-  // Store the coordinates to g_points array
-  //console.lfog("Storing coordinates onto an array")
-  
-  //console.log("SIZE : ", point.size)
   g_shapes_list.push(point)
-  console.log(g_shapes_list)
   console.log(point)
   renderAllShapes()
   
@@ -209,10 +189,9 @@ function renderAllShapes() {
   // Clear <canvas>
   gl.clear(gl.COLOR_BUFFER_BIT);
   let len = g_shapes_list.length;
-  //console.log("Now for a for loop ", len, "long.")
   for(let i = 0; i < len; i++) {
-    //console.log("g_shapes_list[i]: ", g_shapes_list[i])
-    g_shapes_list[i].render()
+    console.log(g_shapes_list[i])
+    g_shapes_list[i].render();
     // Draw
 
     
@@ -225,21 +204,21 @@ function addTriangle(color, vertices){
 }
 
 function drawPicture(){
-  
-  //console.log("Triangle:\n", point);
   // 20 + triangles
 
   // addTriangle([1, 0, 0, 1], [ 0.0, 0.0, 
   //                             0.0, 1.0,
   //                             1.0, 0.0]);
                           
-  addTriangle([1, 0.69, 0, 1], [ 
-    0.0, 0.0,
-    0.0, -1.0, 
-    -1.0, 0.0]);
+  //addTriangle([1, 0.69, 0, 1], [ 
+  //  0.0, 0.0,
+  //  0.0, -1.0, 
+  //  -1.0, 0.0]);
   g_shapes_list = []; 
-  renderAllShapes()
+  //renderAllShapes()
   water = new Point([0.0, 0.71, 1.0, 1.0], 400, [0, 0])
+  tail1 = new Triangle([1, 1, 0.24, 1], 34.5, [-0.85, -0.29],[],"isosceles_left")
+  tail2 = new Triangle([1, 1, 0.24, 1], 34.5, [-0.85, -0.475],[],"isosceles_left")
   fishbody1 = new Point([1, 0.69, 0, 1], 72, [-0.5999884271621704, -.3])
   fishbody2 = new Point([1, 0.69, 0, 1], 72, [-0.2999884271621704, -.3])
   fishbody3 = new Point([1, 0.69, 0, 1], 72, [0.0519884271621704,  -.3])
@@ -249,29 +228,29 @@ function drawPicture(){
   fish_eye_outer = new Point([1, 1, 1, 1], 25, [0.1600115728378296, -0.3050115728378296])
   fish_eye_inner = new Point([0, 0, 0, 1], 15, [0.1800115728378296, -0.27501157283782957])
   fin_1 = new Triangle([1, 1, 0.24, 1], 50,  [-0.3399884271621704, -0.12334490716457366])
-  fin_2 = new Triangle([1, 1, 0.24, 1], 50,  [-0.3399884271621704, -0.47334490716457366])  
-  var reflect_dist_fin = (fin_2.vertices[5] - fin_2.vertices[1]) * 2
-  fin_2.vertices[5] -= reflect_dist_fin
-
+  fin_2 = new Triangle([1, 1, 0.24, 1], 50,  [-0.3399884271621704, -0.47334490716457366],[],"right_down")
+  smile = new Triangle([1, 1, 0.24, 1], 15, [0.3200115728378296,-0.3550115728378296],[],"right_down")
   //fish_head_top = new Triangle([1, 0.69, 0, 1], 72,)
   g_shapes_list.push(water)
+  g_shapes_list.push(tail1) 
+  g_shapes_list.push(tail2) 
   g_shapes_list.push(fishbody1)
   g_shapes_list.push(fishbody2)
   g_shapes_list.push(fishbody3)
   g_shapes_list.push(fish_head)                 
   g_shapes_list.push(fish_eye_outer)    
   g_shapes_list.push(fish_eye_inner)  
-  g_shapes_list.push(fin_1)   
-  g_shapes_list.push(fin_2) 
+  g_shapes_list.push(fin_1)
+  g_shapes_list.push(fin_2)
   g_shapes_list.push(big_bubble)                     
-  g_shapes_list.push(small_bubble)                
-  addTriangle([1, 0.69, 0, 1], [ 
-    0.0, 0.0,
-    0.0, -1.0, 
-    -1.0, 0.0]);
+  g_shapes_list.push(small_bubble)       
+  g_shapes_list.push(smile)         
+  // addTriangle([1, 0.69, 0, 1], [ 
+  //   0.0, 0.0,
+  //   0.0, -1.0, 
+  //   -1.0, 0.0]);
   renderAllShapes();
 }
-
 function DrawTriangle(vertices) {
   //var vertices = new Float32Array([
   //  0, 0.5,   -0.5, -0.5,   0.5, -0.5
