@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Paint</title>
+  </head>
+
+  <body onload="main()">
+    <canvas id="webgl" width="400" height="400">
+    Please use a browser that supports "canvas"
+    </canvas>
+    <script src="./lib/webgl-utils.js"></script>
+    <script src="./lib/cuon-matrix.js"></script>
+    <script src="./lib/webgl-debug.js"></script>
+    <script src="./lib/cuon-utils.js"></script>
+
+    <script src="./src/ColoredPoints.js"></script>
+    <script src="./src/HelloTriangle.js"></script>
+    <script src="./src/HelloCircle.js"></script>
+    
+  </body>
+  
+  <img src="./src/fish.jpg" alt="fish" width="400" height="400">
+  <br>
+  <div class="slidecontainer">
+    <text>Red</text>
+    <input type="range" min="0" max="100" value="100" class="slider" id="red">
+  </div>
+  <br>
+  <div class="slidecontainer">
+    <text>Green</text>
+    <input type="range" min="0" max="100" value="100" class="slider" id="green">
+  </div>
+  <br>
+  <div class="slidecontainer">
+    <text>Blue</text>
+    <input type="range" min="0" max="100" value="100" class="slider" id="blue">
+  </div>
+  <div class="slidecontainer">
+    <text>Size</text>
+    <input type="range" min="10" max="400" value="50" class="slider" id="size">
+  </div>
+  <button type="button" id="green_button">Green!</button>
+  <button type="button" id="red_button">Red!</button>
+  <button type="button" id="blue_button">Blue!</button>
+  <br>  
+  <button type="clear" id="clear">Clear</button>
+  <br>
+  <button type="point" id="point">Point</button>
+  <div class="slidecontainer">
+    <button type="circle_button" id="circle_Point">Circle</button>
+    <text>Circle Segments</text>
+    <input type="range" min="5" max="36" value="10" class="slider" id="CircleSegs">
+  </div>
+  <button type="triangle_button" id="Triangle">Triangle</button> <label for="op_lab">Rotation</label>
+  <select name="triangle" id="tri_type">
+    <option value="right_right">Right Triangle (Right)</option>      
+      <option value="right_left">Right Triangle (Left)</option>
+      <option value="right_down">Right Triangle (Down)</option>
+      <option value="left_n_down">Right Triangle (Left and Down)</option>
+      <option value="equilateral">Equilateral</option>   
+      <option value="isosceles">Isosceles(Up)</option>   
+      <option value="isosceles_down">Isosceles (Down)</option>   
+      <option value="isosceles_right">Isosceles(Right)</option>   
+      <option value="isosceles_left">Isosceles(Left)</option>
+  </select>
+  <button type="button" id="picture">Picture</button> 
+  
+</html>
