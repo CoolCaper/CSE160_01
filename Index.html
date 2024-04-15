@@ -18,6 +18,8 @@
     <script src="./src/HelloCircle.js"></script>
     
   </body>
+  
+  <img src="./src/fish.jpg" alt="fish" width="400" height="400">
   <br>
   <div class="slidecontainer">
     <text>Red</text>
@@ -35,7 +37,7 @@
   </div>
   <div class="slidecontainer">
     <text>Size</text>
-    <input type="range" min="10" max="90" value="50" class="slider" id="size">
+    <input type="range" min="10" max="400" value="50" class="slider" id="size">
   </div>
   <button type="button" id="green_button">Green!</button>
   <button type="button" id="red_button">Red!</button>
@@ -43,13 +45,20 @@
   <br>  
   <button type="clear" id="clear">Clear</button>
   <br>
-  <button type="triangle_button" id="Triangle">Triangle</button>
   <button type="point" id="point">Point</button>
-  <button type="circle_button" id="circle_Point">Circle</button>
-  <br>
-  
   <div class="slidecontainer">
+    <button type="circle_button" id="circle_Point">Circle</button>
     <text>Circle Segments</text>
     <input type="range" min="5" max="36" value="10" class="slider" id="CircleSegs">
   </div>
+  <button type="triangle_button" id="Triangle">Triangle</button> <label for="op_lab">Type:</label>
+  <select name="triangle" id="tri_type">
+      <option value="equal">Equilateral</option>
+      <option value="right_left">Right Triangle (Left)</option>
+      <option value="right_right">Right Triangle (Right)</option>      
+      <option value="right_down">Right Triangle (Down)</option>
+      <option value="left_n_down">Right Triangle (Left and Down)</option>
+  </select>
+  <button type="button" id="picture">Picture</button> 
+  
 </html>

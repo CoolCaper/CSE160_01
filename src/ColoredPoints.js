@@ -93,6 +93,9 @@ updateSliders();}
   document.getElementById("Triangle").onclick = (function() {choose_shape = 1})
   document.getElementById("point").onclick = (function() {choose_shape = 0})
   document.getElementById("circle_Point").onclick = (function() {choose_shape = 2})
+
+  document.getElementById("picture").onclick = (function() { drawPicture(); })
+  //console.log("TRI TYPE: ", triangle_type)
 }
 
 
@@ -126,7 +129,7 @@ class Point {
     gl.uniform4f(u_FragColor, this.color[0], this.color[1], this.color[2], this.color[3]);
     gl.uniform1f(u_Size, this.Size)
     gl.drawArrays(gl.POINTS, 0, 1);
-    console.log(this.color)
+    //console.log(this.color)
     // 
   }
 }
@@ -162,6 +165,8 @@ function main() {
 //var g_colors = [];  // The array to store the color of a point
 //var g_sizes = [];
 function click(ev) {
+  
+  //var triangle_type = document.getElementById("triangle").value
   var point;
   var rect = ev.target.getBoundingClientRect();  
   var x = ev.clientX; // x coordinate of a mouse pointer
@@ -169,8 +174,12 @@ function click(ev) {
   x = ((x - rect.left) - canvas.width/2)/(canvas.width/2);
   y = (canvas.height/2 - (y - rect.top))/(canvas.height/2);
   if (choose_shape == 1) { 
-    point = new Triangle(color=color_storage.slice(),size=selected_Size,position=[x, y])
-    console.log("Triangle:\n", point);
+    // Add a check for a flipped triangle
+    // [xy[0], xy[1], xy[0]-d, xy[1], xy[0], xy[1]-d]
+    //console.log("TRIANGLE TYPE", triangle_type)
+    point = new Triangle(color=color_storage.slice(),size=selected_Size,position=[x, y],"right_left")
+    console.log("TRI TYPE:", point.tri_type)
+    //console.log("Tri Type Triangle:\n", point);
   } else if (choose_shape == 0){
     //console.log("Getting point...")
     point = new Point(color_storage.slice(), selected_Size, [x, y])
@@ -189,8 +198,8 @@ function click(ev) {
   
   //console.log("SIZE : ", point.size)
   g_shapes_list.push(point)
-  //console.log(g_shapes_list)
-  //console.log(point)
+  console.log(g_shapes_list)
+  console.log(point)
   renderAllShapes()
   
 }
@@ -210,6 +219,58 @@ function renderAllShapes() {
   }
 }
 
+
+function addTriangle(color, vertices){
+  g_shapes_list.push(new Triangle(color, 1.0, [0, 0], vertices))
+}
+
+function drawPicture(){
+  
+  //console.log("Triangle:\n", point);
+  // 20 + triangles
+
+  // addTriangle([1, 0, 0, 1], [ 0.0, 0.0, 
+  //                             0.0, 1.0,
+  //                             1.0, 0.0]);
+                          
+  addTriangle([1, 0.69, 0, 1], [ 
+    0.0, 0.0,
+    0.0, -1.0, 
+    -1.0, 0.0]);
+  g_shapes_list = []; 
+  renderAllShapes()
+  water = new Point([0.0, 0.71, 1.0, 1.0], 400, [0, 0])
+  fishbody1 = new Point([1, 0.69, 0, 1], 72, [-0.5999884271621704, -.3])
+  fishbody2 = new Point([1, 0.69, 0, 1], 72, [-0.2999884271621704, -.3])
+  fishbody3 = new Point([1, 0.69, 0, 1], 72, [0.0519884271621704,  -.3])
+  big_bubble = new Circle([0, 1, .95, 1], 101, [0.7850115728378296, 0.6749884271621704], 24)
+  small_bubble = new Circle([0, 1, .95, 1], 60, [0.5850115728378296, 0.2749884271621704], 24)
+  fish_head = new Circle([1, 0.69, 0, 1], 75, [0.2550115728378296, -0.3], 7)  
+  fish_eye_outer = new Point([1, 1, 1, 1], 25, [0.1600115728378296, -0.3050115728378296])
+  fish_eye_inner = new Point([0, 0, 0, 1], 15, [0.1800115728378296, -0.27501157283782957])
+  fin_1 = new Triangle([1, 1, 0.24, 1], 50,  [-0.3399884271621704, -0.12334490716457366])
+  fin_2 = new Triangle([1, 1, 0.24, 1], 50,  [-0.3399884271621704, -0.47334490716457366])  
+  var reflect_dist_fin = (fin_2.vertices[5] - fin_2.vertices[1]) * 2
+  fin_2.vertices[5] -= reflect_dist_fin
+
+  //fish_head_top = new Triangle([1, 0.69, 0, 1], 72,)
+  g_shapes_list.push(water)
+  g_shapes_list.push(fishbody1)
+  g_shapes_list.push(fishbody2)
+  g_shapes_list.push(fishbody3)
+  g_shapes_list.push(fish_head)                 
+  g_shapes_list.push(fish_eye_outer)    
+  g_shapes_list.push(fish_eye_inner)  
+  g_shapes_list.push(fin_1)   
+  g_shapes_list.push(fin_2) 
+  g_shapes_list.push(big_bubble)                     
+  g_shapes_list.push(small_bubble)                
+  addTriangle([1, 0.69, 0, 1], [ 
+    0.0, 0.0,
+    0.0, -1.0, 
+    -1.0, 0.0]);
+  renderAllShapes();
+}
 
 function DrawTriangle(vertices) {
   //var vertices = new Float32Array([

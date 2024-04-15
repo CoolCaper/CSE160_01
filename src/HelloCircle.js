@@ -2,7 +2,7 @@
 
 class Circle {
   constructor(color=[1.0,1.0,1.0,1.0], size=5.0,position=[],circle_segments=5){
-    this.type = 'triangle';
+    this.type = 'circle';
     this.position = position;
     this.color = color;
     this.size = size/2;
